@@ -19,21 +19,17 @@ export default function UserDirectoryApp() {
       setLoading(true);
       setError("");
 
-      const baseUrl =
-        import.meta.env.MODE === "production" ? "https://reqres.in" : "";
-      const url = `${baseUrl}/api/users?page=${page}`;
-
-      const headers = { Accept: "application/json" };
-      if (import.meta.env.VITE_API_KEY) {
-        headers["Authorization"] = `Bearer ${import.meta.env.VITE_API_KEY}`;
-      }
+      const url =
+        import.meta.env.MODE === "production"
+          ? `https://reqres.in/api/users?page=${page}`
+          : `/api/users?page=${page}`;
 
       try {
         const res = await fetch(url, {
           signal: abort.signal,
           mode: "cors",
           credentials: "omit",
-          headers,
+          headers: { Accept: "application/json" },
         });
 
         if (!res.ok) {
