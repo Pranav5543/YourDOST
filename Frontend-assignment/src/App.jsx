@@ -15,48 +15,50 @@ export default function UserDirectoryApp() {
   useEffect(() => {
     const abort = new AbortController();
 
-    async function fetchData() {
+    const fetchData = async () => {
       setLoading(true);
       setError("");
 
-      const url = `/api/users?page=${page}`;
+      const baseUrl =
+        import.meta.env.MODE === "production"
+          ? import.meta.env.VITE_API_BASE || "https://reqres.in"
+          : "";
+      const url = `${baseUrl}/api/users?page=${page}`;
 
       try {
-        let res = await fetch(url, {
+        const res = await fetch(url, {
           signal: abort.signal,
           mode: "cors",
           credentials: "omit",
           headers: { Accept: "application/json" },
         });
 
-        // retry plain fetch if environment injects headers
-        if (res.status === 401) res = await fetch(url);
-
         if (!res.ok) {
-          let bodyText = "";
-          try {
-            bodyText = await res.text();
-          } catch {}
-          throw new Error(`HTTP ${res.status} — ${bodyText}`);
+          throw new Error(`HTTP ${res.status}: ${res.statusText}`);
         }
 
         const j = await res.json();
-        if (!j.data || !Array.isArray(j.data))
-          throw new Error("Invalid API response");
+        if (!j.data || !Array.isArray(j.data)) {
+          throw new Error("Invalid API response structure");
+        }
 
         setUsers(j.data);
         setTotalPages(j.total_pages || 1);
+        setError(""); // Clear any previous errors
       } catch (e) {
-        console.error("Fetch error:", e);
-        setError(`Could not load users from API (${e.message}).`);
-        setUsers([]);
-        setTotalPages(1);
+        if (e.name !== "AbortError") {
+          console.error("Fetch error:", e);
+          setError(`Failed to load users: ${e.message}`);
+          setUsers([]);
+          setTotalPages(1);
+        }
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchData();
+
     return () => abort.abort();
   }, [page]);
 
