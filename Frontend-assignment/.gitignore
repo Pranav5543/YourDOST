@@ -1,0 +1,49 @@
+# --- Node & Vite ---
+node_modules/
+dist/
+build/
+.env
+.env.*.local
+.vscode/
+.idea/
+.DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Temp files
+*.tmp
+*.temp
+*.log
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# --- Optional: Ignore cache ---
+.cache/
+vite.config.ts.timestamp*
+vite.config.js.timestamp*
+
+# --- Ignore frontend generated files ---
+frontend/node_modules/
+frontend/dist/
+
+# --- Ignore Python cache (if DSA is in Python) ---
+__pycache__/
+*.py[cod]
+
+# --- Ignore compiled C++/Java files (if DSA uses them) ---
+*.class
+*.exe
+*.out
+*.o
+*.obj
+
+# --- Ignore package-lock/yarn.lock only if you don't want them ---
+# package-lock.json
+# yarn.lock
+
