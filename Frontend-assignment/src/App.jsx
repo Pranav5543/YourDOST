@@ -20,9 +20,7 @@ export default function UserDirectoryApp() {
       setError("");
 
       const baseUrl =
-        import.meta.env.MODE === "production"
-          ? import.meta.env.VITE_API_BASE || "https://reqres.in"
-          : "";
+        import.meta.env.MODE === "production" ? "https://reqres.in" : "";
       const url = `${baseUrl}/api/users?page=${page}`;
 
       try {
